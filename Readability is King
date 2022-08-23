@@ -1,0 +1,59 @@
+"""
+We will use the Flesch–Kincaid Grade Level to evaluate the readability of a piece of text. This grade level is an 
+approximation for what schoolchildren are able to understand a piece of text. For example, a piece of text with a 
+grade level of 7 can be read by seventh-graders and beyond.
+
+The way to calculate the grade level is as follows:
+        (0.39 * average number of words per sentence) + (11.8 * average number of syllables per word) - 15.59
+        
+Write a function that will calculate the Flesch–Kincaid grade level for any given string. Return the grade level 
+rounded to two decimal points.
+
+Ignore hyphens, dashes, apostrophes, parentheses, ellipses and abbreviations.
+
+Remember that the text can contain more than one sentence: code accordingly!
+
+HINT: Count the number of vowels as an approximation for the number of syllables, but count groups of vowels as one 
+(e.g. deal is one syllable). Do not count y as a vowel!
+
+Example: "The turtle is leaving." -> 3.67
+The average number of words per sentence is 4 and the average number of syllables per word is 1.5. The score is then:
+                                        (0.39 * 4) +  (11.8 * 1.5) - 15.59 = 3.67
+"""
+#Splitting the text into sentences by punctuation + removing unnecessary punctuation.
+
+text = "To be or not to be. That is the question."
+def flesch_kincaid(text):
+    new_text = []
+    for sentence in re.compile('[.!?] ').split(text):
+        word = ""
+        for letter in sentence:
+            if letter not in "-_!'?|\/)(.":
+                word += letter
+        new_text.append(word)
+
+    new_text = [sentence.split(" ") for sentence in new_text]
+
+    #Counting the number of words x sentence and calculating the average number of words per sentence.
+    count_word = 0
+    num_words = []
+    for sentence in new_text:
+        count_word = 0
+        for word in sentence:
+            count_word +=1
+        num_words.append(count_word)
+
+    average_num_words = round(sum(num_words)/len(num_words),5)
+
+    #Counting the number of syllables per sentence + calculating the average number of syllables per word.
+    num_syllables = []
+
+    for sentence in new_text:
+        for word in sentence:
+            num_syllables.append(len(re.findall('[aeiou]+', word, re.I)))
+
+    average_num_syllables = round(sum(num_syllables)/len(num_syllables),5)
+
+    #Bringing it all together by inputting the average number of words and average number of syllables into the formula:
+    grade_level = round((0.39*average_num_words + 11.8*average_num_syllables) - 15.59,2)
+    return grade_level
