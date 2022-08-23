@@ -1,0 +1,40 @@
+"""
+Write a function cakes(), which takes the recipe (object) and the available ingredients (also an object) and returns 
+the maximum number of cakes Pete can bake (integer). For simplicity there are no units for the amounts (e.g. 1 lb of 
+flour or 200 g of sugar are simply 1 or 200). Ingredients that are not present in the objects, can be considered as 0.
+
+Examples:
+
+# must return 2
+cakes({flour: 500, sugar: 200, eggs: 1}, {flour: 1200, sugar: 1200, eggs: 5, milk: 200})
+# must return 0
+cakes({apples: 3, flour: 300, sugar: 150, milk: 100, oil: 100}, {sugar: 500, flour: 2000, milk: 2000})
+"""
+
+def cakes(recipe, available):
+    """
+    The first step is to filter from the available ingredients those that are required for the recipe. For these we 
+    use a dictionary comprehension, that sets the ingredient amount equal to the available amount given that the 
+    ingredient is in the recipe."""
+
+    required = {ingredient: available[ingredient] for ingredient in available if ingredient in recipe}
+
+    num_cakes = 0
+    """
+    Now, we check that the filtered list of ingredients is equal to that of the recipe. If not, we print 0. Else,
+    for each ingredient in the required list, while the amount of the ingredients are greater than zero, 
+    we iterate through the ingredients in the recipe and subtract their amount from the required list. After each 
+    iteration, I check to see if the amount of all ingredients is greater than 0. If yes, we add to the cake counter.
+    Once one of the ingredients hits 0, the loop breaks.
+    """
+    
+    if required.keys() == recipe.keys():
+        for ingredient, amount in required.items():
+            while required[ingredient] > 0:
+                for ingredient, amount in recipe.items():       
+                    required[ingredient] = required[ingredient] - recipe[ingredient]
+                if all(amount >= 0 for amount in required.values()) == True:
+                    num_cakes +=1
+        return num_cakes
+    else:
+        return 0
