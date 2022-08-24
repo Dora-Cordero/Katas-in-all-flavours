@@ -1,0 +1,54 @@
+"""
+In this kata you have to write a simple Morse code decoder. While the Morse code is now mostly superseded by voice and digital data communication 
+channels, it still has its use in some applications around the world.
+The Morse code encodes every character as a sequence of "dots" and "dashes". For example, the letter A is coded as ·−, letter Q is coded as −−·−, 
+and digit 1 is coded as ·−−−−. The Morse code is case-insensitive, traditionally capital letters are used. When the message is written in Morse code, 
+a single space is used to separate the character codes and 3 spaces are used to separate words. For example, the message HEY JUDE in Morse code 
+is ···· · −·−−   ·−−− ··− −·· ·.
+
+NOTE: Extra spaces before or after the code have no meaning and should be ignored.
+
+In addition to letters, digits and some punctuation, there are some special service codes, the most notorious of those is the international distress 
+signal SOS (that was first issued by Titanic), that is coded as ···−−−···. These special codes are treated as single special characters, and usually are 
+transmitted as separate words.
+
+Your task is to implement a function that would take the morse code as input and return a decoded human-readable string.
+"""
+
+
+MORSE = {'A': '.-',     'B': '-...',   'C': '-.-.', 
+        'D': '-..',    'E': '.',      'F': '..-.',
+        'G': '--.',    'H': '....',   'I': '..',
+        'J': '.---',   'K': '-.-',    'L': '.-..',
+        'M': '--',     'N': '-.',     'O': '---',
+        'P': '.--.',   'Q': '--.-',   'R': '.-.',
+        'S': '...',    'T': '-',      'U': '..-',
+        'V': '...-',   'W': '.--',    'X': '-..-',
+        'Y': '-.--',   'Z': '--..',
+
+        '0': '-----',  '1': '.----',  '2': '..---',
+        '3': '...--',  '4': '....-',  '5': '.....',
+        '6': '-....',  '7': '--...',  '8': '---..',
+        '9': '----.', " ": "  " 
+        }
+MORSE_CODE = {value: key for key, value in MORSE.items()}
+
+def decode_morse(morse_code):
+    morse_code = morse_code.strip() #Strips the decoded text of leading and trailing whitespaces.
+    morse_code += " " #Adds a space at the end of the decoded text so that we can access the last morse point.
+    decoded_sentence = ""
+    cipher_letter = ""
+    for point in morse_code:
+        if point != " ":
+            #Here we introduce a counter to keep track of the spaces (one to separate letters and two to separate words). 
+            i = 0
+            cipher_letter += point #Here we add the point to cipher_letter to build it. 
+        elif point == " ":
+            i+=1 #Add one to the counter because we hit a space.
+            if i == 1: #If the counter is = 1 it means we found a letter.
+                decoded_sentence += MORSE_CODE[cipher_letter] 
+                #Translate the codepoints in cipher_word using the morse code dictionary, and add it to our sentence.
+                cipher_letter = "" #Resets the cipher_letter so that we can build the next one.
+            elif i==2:
+                decoded_sentence += " " #Two spaces = new word. We thus add a space to our sentence.       
+    return decoded_sentence
