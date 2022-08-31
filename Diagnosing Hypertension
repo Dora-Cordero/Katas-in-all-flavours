@@ -1,0 +1,45 @@
+#Diagnosing Hypertension
+"""The 2020 International Society of Hypertension Practice Guidelines describe raised blood pressure (hypertension) 
+and its complications as the leading cause of death in the world at the time of publication. Blood pressure is the 
+measure of the heart's pumping pressure against the blood vessel walls. It is recorded as a systolic pressure over a 
+diastolic pressure (for example '120/80 mmHg') which represent the maximum and minimum pressure in the vessels 
+between heartbeats.
+For the purpose of this kata, hypertension can be diagnosed when a patient's blood pressure meets any of the three 
+criteria below:
+    -Average of all measured systolic pressures >= 140 mmHg. Must have minumum of 2 measurements.
+    -Average of all measured diastolic presures >= 90 mmHg. Must have minimum of 2 measurements.
+    -Any one measurement with systolic pressure >= 180 mmHg AND diastolic pressure >= 110 mmHg
+
+You are given a list, patients, in which each element represents a patient. Each patient/element consists of a list of
+strings (representing all measurements of a patient's blood pressure) in the format "s/d", where s is the systolic 
+pressure and d the diastolic, both in mmHg. Systolic and diastolic numbers will always be whole numbers.
+Return the number of patients that meet any of the above hypertension definitions. """
+
+def hypertensive(patients):
+    syst_pressure = []
+    mean_syst_pressure = None
+    diast_pressure = []
+    mean_diast_pressure = None
+    num_patients = 0
+
+    for person in patients:
+        for pressure in person:
+            pressure = pressure.split("/")
+            syst_pressure.append(int(pressure[0]))
+            diast_pressure.append(int(pressure[1]))
+        mean_syst_pressure = int(sum(syst_pressure)/len(syst_pressure))
+        mean_diast_pressure = int(sum(diast_pressure)/len(diast_pressure))
+        if len(syst_pressure) >=2 and mean_syst_pressure >=140:
+            num_patients +=1
+        elif len(diast_pressure) >=2 and mean_diast_pressure >= 90:
+            num_patients +=1
+        else:
+            for x,y in zip(syst_pressure,diast_pressure):
+                if x >= 180 and y >=110:
+                    num_patients +=1
+                    break
+        syst_pressure = []
+        mean_syst_pressure = None
+        diast_pressure = []
+        mean_diast_pressure = None
+    return num_patients
