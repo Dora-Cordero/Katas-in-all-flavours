@@ -1,0 +1,48 @@
+"""To participate in a prize draw, each one gives their first name. Each letter of a firstname has a value which is
+its rank in the English alphabet. A=1, B=2, etc.
+The length of the first name is added to the sum of these ranks hence a number som.
+An array of random weights is linked to the firstnames and each som is multiplied by its corresponding weight to get
+what they call a winning number.
+EXAMPLE:
+    names: "COLIN,AMANDBA,AMANDAB,CAROL,PauL,JOSEPH"
+    weights: [1, 4, 4, 5, 2, 1]
+
+    PauL -> som = length of firstname + 16 + 1 + 21 + 12 = 4 + 50 -> 54
+    The *weight* associated with PauL is 2 so PauL's *winning number* is 54 * 2 = 108.
+    
+Now one can sort the firstnames in decreasing order of the winning numbers. When two people have the same winning
+number, sort them alphabetically by their firstnames.
+Task:
+1. Parameters: st, a string of firstnames. we, an array of weights. n(ranks are numbered from 1)
+2. Return: The firstname of the participant whose rank is n(ranks are numbered from 1)
+
+def rank(st, we, n):
+    if st == "":
+        return "No participants"
+    else:
+        alphabet = {letter:position for letter, position in zip("abcdefghijklmnopqrstuvwxyz",range(1,27))}
+        alphabet.update({letter:position for letter, position in zip("ABCDEFGHIJKLMNOPQRSTUVWXYZ",range(1,27))})
+
+        som = 0
+        soms = []   
+        winning_number = 0
+        winning_numbers = []
+
+        for name in st.split(","):
+            for letter in name:
+                som = som + alphabet[letter]
+            som += len(name)
+            soms.append(som)
+            som = 0
+
+        for som, weight in zip(soms,we[:len(soms)]):
+            winning_number = winning_number + (som * weight)
+            winning_numbers.append(winning_number)
+            winning_number = 0
+
+        dictionary = {key: value for key,value in zip(st.split(","),winning_numbers)}
+        dictionary = sorted(dictionary.items(), key = lambda x: (-x[1],x[0]))
+    if n > len(st.split(",")):
+        return "Not enough participants"
+    else:
+        return dictionary[n-1][0]
