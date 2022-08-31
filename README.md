@@ -1,2 +1,2 @@
 # Katas-in-all-flavours
-A repo where I store my solutions to the katas I solve.
+A repo where I store some of my solutions to the many katas I solve.
