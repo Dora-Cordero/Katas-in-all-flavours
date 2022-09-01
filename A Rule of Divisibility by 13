@@ -1,0 +1,17 @@
+def thirt(n):
+    if n <= 99:
+        return n
+    else:
+        n = [int(i) for i in reversed(str(n))]
+        multipliers = [(10**i) % 13 for i in range(len(n))]
+
+        while len(n) > 2:
+            cycle = []
+            for number, multiplier in zip(n, multipliers):
+                cycle.append(number*multiplier)
+            if len(n) > 2:
+                n = [int(i) for i in reversed(str(sum(cycle)))]
+                multiplier = [(10**i) % 13 for i in range(len(n))]
+        if len(n) == 2:
+            n = "".join([str(num) for num in list(reversed(n))])
+            return int(n)
