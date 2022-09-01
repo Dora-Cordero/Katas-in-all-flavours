@@ -1,0 +1,30 @@
+def mix_words(string):
+    string_list = []
+    term1 = ""
+    for letter in string:
+        if letter.isalpha()==True:
+            term1+=letter
+        else:
+            if term1 != "":
+                string_list.append(term1)
+            string_list.append(letter)
+            term1 =""
+    string_list.append(term1)
+
+    new_string_list = []
+
+    for word in string_list:
+        term = ""
+        if word not in "!,? ." and len(word) > 3:
+            term += word[0]
+            while len(term) < (len(word) - 1):
+                scrambler = "".join(random.sample(word[1:-1],len(word)-2))
+                while scrambler == word[1:-1]:
+                    scrambler = "".join(random.sample(word[1:-1],len(word)-2))
+                term += scrambler
+                word.replace(scrambler,"")
+            term += word[-1]
+            new_string_list.append(term)
+        else:
+            new_string_list.append(word)
+    return "".join([word for word in new_string_list])
