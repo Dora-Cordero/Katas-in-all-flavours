@@ -1,0 +1,4 @@
+def to_nato(words):
+    new_string = "" 
+    return "".join([new_string + NATO[letter] + " " if letter in NATO.keys() else new_string + letter +" " 
+    for letter in words.replace(" ","").upper() ]).strip() 
