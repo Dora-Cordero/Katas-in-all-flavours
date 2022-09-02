@@ -1,0 +1,12 @@
+def sc_perm_comb(number):
+    if number < 10:
+        return number
+    else:
+        number = [num for num in str(number)]
+        num_combos = [list(permutations(number,i)) for i in range(len(number)+1)]
+        filtered_combos = []
+        filtered_combos = ["".join([l for l in m]) for i in num_combos[1:] for m in i if m 
+                           not in filtered_combos]
+        filtered_combos = [int(num) for num in filtered_combos if num !="0"]
+        new_filtered = set(filtered_combos)
+        return sum(new_filtered)
