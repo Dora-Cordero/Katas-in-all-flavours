@@ -1,0 +1,45 @@
+"""
+dataand data1 are two strings with rainfall records of a few cities for months from January to December. The records of towns are separated by \n. 
+The name of each town is followed by :
+
+Task:
+1. function: mean(town, strng) should return the average of rainfall for the city town and the strng data or data1.
+2. function: variance(town, strng) should return the variance of rainfall for the city town and the strng data or data1.
+
+Examples:
+mean("London", data), 51.19(9999999999996) 
+variance("London", data), 57.42(833333333374)
+
+if functions mean or variance have as parameter town a city which has no records return -1 or -1.0 (depending on the language) """
+
+
+def string_cleanup(s):
+    s = [i.split(":") for i in s.split("\n")]
+    s = [[element.split(",") for element in pair] for pair in s]
+    monthly_rain = {"".join(x for x in pair[0]): pair[1] for pair in s}
+    month = []
+    months =[]
+    for x in list(monthly_rain.values()):
+        for y in x:
+            y = y.split(" ")
+            month.append(y)
+        months.append(month)
+        month = []
+    new_months = []
+
+    for x in months:
+        for y in x:
+            month.append(float(y[1]))
+        new_months.append(month)
+        month = []
+    return {key:value for key,value in zip(monthly_rain.keys(), new_months)}
+
+def mean(town, s):
+    s = string_cleanup(s)
+    average_rainfall = {key: sum(value)/len(value) for key,value in s.items()} 
+    return average_rainfall[town] if town in average_rainfall.keys() else -1 
+
+def variance(town,s):
+    s = string_cleanup(s)
+    variance_rainfall = {key: pvariance(value) for key,value in s.items()} 
+    return variance_rainfall[town] if town in variance_rainfall.keys() else -1 
