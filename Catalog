@@ -1,0 +1,55 @@
+"""You are given a small extract of a catalog:
+
+s = "<prod><name>drill</name><prx>99</prx><qty>5</qty></prod>
+
+<prod><name>hammer</name><prx>10</prx><qty>50</qty></prod>
+
+<prod><name>screwdriver</name><prx>5</prx><qty>51</qty></prod>
+
+<prod><name>table saw</name><prx>1099.99</prx><qty>5</qty></prod>
+
+<prod><name>saw</name><prx>9</prx><qty>10</qty></prod>
+
+...
+(prx stands for price, qty for quantity) and an article i.e "saw".
+
+The function catalog(s, "saw") returns the line(s) corresponding to the article with $ before the prices:
+
+"table saw > prx: $1099.99 qty: 5\nsaw > prx: $9 qty: 10\n..."
+If the article is not in the catalog return "Nothing".
+
+Notes
+1. There is a blank line between two lines of the catalog.
+2. The same article may appear more than once. If that happens return all the lines concerned by the article (in the same order as in the catalog).
+3. The line separator of results may depend on the language \nor \r\n. In Pascal \n is replaced by LineEnding."""
+
+import re
+def catalog(s, article):
+    s = [line for line in s.split("\n") if line != ""]
+    s = [re.findall('[a-z0-9\s.]+', line, flags=re.IGNORECASE) for line in s]
+    sub_t = []
+    t = []
+    for line in s:
+        for index,element in enumerate(line):
+            if line[index-1] =="name" and line[index] != "prx":
+                sub_t.append(["name",line[index]])
+            elif line[index-1] =="prx" and line[index] != "qty":
+                sub_t.append(["prx",line[index]])
+            elif line[index-1] =="qty" and line[index] != "prod":
+                sub_t.append(["qty",line[index]])
+        t.append(sub_t)
+        sub_t = []
+    sentence = []
+    for line in t:
+        for index,element in enumerate(line):
+            if article in element[1]:
+                sentence.append(f"{line[0][1]} > prx: ${line[1][1]} qty: {line[2][1]}")
+    
+    if len(sentence) == 0:
+        return "Nothing"
+    elif len(sentence) == 1:
+        return sentence[0]
+    else:
+        sentence = "\r\n".join([word for word in sentence])
+        return sentence
+    return sentence
